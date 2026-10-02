@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lagos Weather App</title>
+<style>
+body{font-family:system-ui;background:#000;color:#fff;text-align:center;padding:20px}
+.card{background:#111;border:1px solid #333;border-radius:16px;padding:20px;max-width:400px;margin:20px auto}
+input{padding:12px;border-radius:8px;border:1px solid #333;width:70%}
+button{padding:12px 20px;background:#22c55e;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
+</style>
+</head>
+<body>
+<h1>🌦️ Lagos Weather</h1>
+<div class="card">
+<input id="city" placeholder="Enter city e.g Lagos" value="Lagos">
+<button onclick="getWeather()">Check</button>
+<div id="result" style="margin-top:20px"></div>
+</div>
+<script>
+async function getWeather(){
+  const city=document.getElementById('city').value;
+  document.getElementById('result').innerHTML='Loading...';
+  try{
+    const res=await fetch(`https://wttr.in/${city}?format=j1`);
+    const data=await res.json();
+    const cur=data.current_condition[0];
+    document.getElementById('result').innerHTML=`
+      <h2>${city}</h2>
+      <h1>${cur.temp_C}°C</h1>
+      <p>${cur.weatherDesc[0].value}</p>
+      <p>Humidity: ${cur.humidity}% | Wind: ${cur.windspeedKmph} km/h</p>
+    `;
+  }catch(e){document.getElementById('result').innerHTML='Error fetching weather';}
+}
+getWeather();
+</script>
+<p style="color:#666">Built by Success Brownson</p>
+</body>
+</html>
